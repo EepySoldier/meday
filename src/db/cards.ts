@@ -138,6 +138,24 @@ export async function markCardDone(db: SQLiteDatabase, id: number) {
   );
 }
 
+// Gives every card a new random position
+export async function shuffleCards(db: SQLiteDatabase) {
+  const cards = await getAllCards(db);
+  const positions = cards.map((card, index) => index);
+
+  // Fisher-Yates shuffle
+  for (let i = positions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = positions[i];
+    positions[i] = positions[j];
+    positions[j] = temp;
+  }
+
+  for (let i = 0; i < cards.length; i++) {
+    await db.runAsync("UPDATE cards SET position = ? WHERE id = ?", positions[i], cards[i].id);
+  }
+}
+
 export async function eraseAllCards(db: SQLiteDatabase) {
   await db.runAsync("DELETE FROM cards");
 }
