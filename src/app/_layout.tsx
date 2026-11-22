@@ -1,11 +1,14 @@
 import { Tabs } from "expo-router";
 import { SymbolView } from "expo-symbols";
+import { SQLiteProvider } from "expo-sqlite";
+import { initDatabase } from "../db/database";
 
 const ACTIVE = "#5668D2";
 const INACTIVE = "#A0A0A4";
 
 export default function RootLayout() {
   return (
+    <SQLiteProvider databaseName="deck.db" onInit={initDatabase}>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -45,5 +48,6 @@ export default function RootLayout() {
         }}
       />
     </Tabs>
+    </SQLiteProvider>
   );
 }
