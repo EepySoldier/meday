@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useFocusEffect } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useCallback, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -64,7 +64,7 @@ export default function DeckScreen() {
 
   function handleStart() {
     if (deck.length === 0) return;
-    // TODO: open the task screen
+    router.push({ pathname: "/task/[id]", params: { id: deck[0].id } });
   }
 
   function handleAddCard() {

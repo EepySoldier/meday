@@ -43,6 +43,7 @@ function AppStack() {
         }}
       >
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="task/[id]" options={{ animation: "slide_from_bottom" }} />
       </Stack>
     </>
   );
