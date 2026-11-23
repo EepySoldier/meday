@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CardForm from "../../components/CardForm";
 import DeckCard from "../../components/DeckCard";
 import EmptyDeck from "../../components/EmptyDeck";
+import SwipeableCard from "../../components/SwipeableCard";
 import { fonts } from "../../constants/fonts";
 import { useSettings } from "../../context/SettingsContext";
 import {
@@ -121,7 +122,8 @@ export default function DeckScreen() {
       {deck.length > 0 && (
         <>
           <View style={styles.stack}>
-            {/* The two cards behind the top one, only their bottom edge peeks out */}
+            {/* The cards behind the top one. Only their bottom edge peeks out,
+                but the next card is drawn fully so you see it while swiping. */}
             {deck.length > 2 && (
               <View
                 style={[
@@ -132,15 +134,17 @@ export default function DeckScreen() {
               />
             )}
             {deck.length > 1 && (
-              <View
-                style={[
-                  styles.backCard,
-                  styles.backCard1,
-                  { backgroundColor: cardColors[deck[1].color] },
-                ]}
-              />
+              <View style={[styles.backCard, styles.backCard1]}>
+                <DeckCard card={deck[1]} />
+              </View>
             )}
-            <DeckCard card={deck[0]} />
+            <SwipeableCard
+              key={deck[0].id}
+              onSwipeLeft={handleLater}
+              onSwipeRight={handleStart}
+            >
+              <DeckCard card={deck[0]} />
+            </SwipeableCard>
           </View>
 
           {settings.showButtons && (
@@ -214,8 +218,6 @@ const styles = StyleSheet.create({
   backCard: {
     position: "absolute",
     borderRadius: 28,
-    borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.06)",
   },
   backCard1: {
     top: 12,
@@ -224,6 +226,8 @@ const styles = StyleSheet.create({
     right: 10,
   },
   backCard2: {
+    borderWidth: 1,
+    borderColor: "rgba(0, 0, 0, 0.06)",
     top: 24,
     bottom: -24,
     left: 20,
