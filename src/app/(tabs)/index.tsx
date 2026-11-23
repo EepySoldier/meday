@@ -4,6 +4,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useCallback, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import CardForm from "../../components/CardForm";
 import DeckCard from "../../components/DeckCard";
 import EmptyDeck from "../../components/EmptyDeck";
 import { fonts } from "../../constants/fonts";
@@ -32,6 +33,7 @@ export default function DeckScreen() {
   const [totalCards, setTotalCards] = useState(0);
   const [doneToday, setDoneToday] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
 
   async function loadCards() {
     if (settings.shuffle && !alreadyShuffled) {
@@ -66,7 +68,7 @@ export default function DeckScreen() {
   }
 
   function handleAddCard() {
-    // TODO: open the new card sheet
+    setShowForm(true);
   }
 
   async function handleSampleDeck() {
@@ -167,6 +169,10 @@ export default function DeckScreen() {
           )}
           {!settings.showButtons && <View style={{ height: 24 }} />}
         </>
+      )}
+
+      {showForm && (
+        <CardForm onClose={() => setShowForm(false)} onSaved={loadCards} />
       )}
     </View>
   );
